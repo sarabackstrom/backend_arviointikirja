@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lessonlist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Lessons</h1>
+    <table>
+		<tr>
+		    <th>Päivämäärä</th>
+		    <th>Luokka</th>
+            <th>Laji</th>
+            <th>Mitä tehtiin</th>
+		</tr>  
+    	<tr th:each = "lesson : ${lessons}">
+    		<td th:text="${lesson.lessonDay}"></td>
+    		<td th:text="${lesson.pupilClass.className}"></td>
+            <td th:text="${lesson.sport.name}"></td>
+            <td th:text="${lesson.lessonDescription}"></td>	
+ 			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td>   		
+ 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
+    	</tr>
+     </table>
+	 <a href="/addLesson">Add Lesson</a>    	
+</body>
+</html>

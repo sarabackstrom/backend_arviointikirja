@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pupillist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Add pupil</h1>
+	<div>
+		<form th:object="${pupil}" th:action="@{/savePupil}" action="#" method="post">
+		  	<label for="fname">Firstname</label>
+			<input type="text" id="fname" th:field="*{firstName}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="lname">Lastname</label>
+			<input type="text" id="lname" th:field="*{lastName}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+
+		  	<label for="classlist">Class</label>
+			 <select id="classlist" th:field="*{pupilClass}" class="form-control">
+       			<option th:each="class: ${pupilclasses}" th:value="${class.classId}" th:text="${class.startYear}+' ' +${class.classCode}"></option>
+    		</select>
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save"></input>
+		</form>
+	</div>
+</body>
+</html>

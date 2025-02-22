@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pupillist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Pupils</h1>
+    <table>
+		<tr>
+		    <th>Name</th>
+		    <th>Class</th>
+		</tr>  
+    	<tr th:each = "pupil : ${pupils}">
+    		<td th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
+    		<td th:text="${pupil.pupilClass.startYear} + ' ' + ${pupil.pupilClass.classCode}"></td>	
+ 			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td> -->   		
+ 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  		
+    	</tr>
+     </table>
+	 <a href="/addPupil">Add Pupil</a>    	
+</body>
+</html>

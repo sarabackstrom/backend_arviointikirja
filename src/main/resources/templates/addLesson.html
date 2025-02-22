@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Lessonlist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <h1>Add lesson</h1>
+    <div>
+        <form th:object="${lesson}" th:action="@{/saveLesson}" action="#" method="post">
+            <label for="lday">Päivämäärä</label>
+            <input type="date" id="lday" th:field="*{lessonDay}" />
+            <div style="clear: both; display: block; height: 10px;"></div>
+
+            <!--- Valitse luokka -->
+            <label for="classlist">Class</label>
+            <select id="classlist" th:field="*{pupilClass}" class="form-control">
+                <option th:each="class: ${pupilclasses}" th:value="${class.classId}"
+                    th:text="${class.startYear}+' ' +${class.classCode}"></option>
+            </select>
+            <div style="clear: both; display: block; height: 10px;"></div>
+            
+            <!--- Valitse laji -->
+            <label for="sport">Laji</label>
+            <select id="sport" th:field="*{sport}" class="form-control">
+                <option th:each="sport: ${sports}" th:value="${sport.sportId}"
+                    th:text="${sport.name}"></option>
+            </select>
+            <div style="clear: both; display: block; height: 10px;"></div>
+            
+            <!--- Kirjoita kuvaus -->
+            <label for="descrip">Mitä tehtiin</label>
+            <textarea id="descrip" th:field="*{lessonDescription}" rows="4" cols="50"></textarea>
+
+            <input type="submit" value="Save"></input>
+        </form>
+    </div>
+</body>
+
+</html>
