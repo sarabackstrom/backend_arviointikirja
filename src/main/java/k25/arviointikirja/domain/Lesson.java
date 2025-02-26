@@ -36,8 +36,7 @@ public class Lesson {
 
     public Lesson() {}
 
-    public Lesson(Long lessonId, String lessonDescription, LocalDate lessonDay, PupilClass pupilClass, Sport sport) {
-        this.lessonId = lessonId;
+    public Lesson(String lessonDescription, LocalDate lessonDay, PupilClass pupilClass, Sport sport) {
         this.lessonDescription = lessonDescription;
         this.lessonDay = lessonDay;
         this.pupilClass = pupilClass;

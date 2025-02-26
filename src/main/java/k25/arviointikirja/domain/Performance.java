@@ -37,6 +37,20 @@ public class Performance {
         this.pupil = pupil;
     }
 
+    public Performance(String shortDescription, boolean attendance, Lesson lesson, Pupil pupil) {
+        this.shortDescription = shortDescription;
+        this.attendance = attendance;
+        this.lesson = lesson;
+        this.pupil = pupil;
+    }
+
+
+    public Performance(boolean attendance, Lesson lesson, Pupil pupil) {
+        this.attendance = attendance;
+        this.lesson = lesson;
+        this.pupil = pupil;
+    }
+
     public Long getPerformanceId() {
         return performanceId;
     }

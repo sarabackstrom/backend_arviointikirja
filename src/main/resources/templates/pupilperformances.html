@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pupilperformances</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Pupil performances</h1>
+    <table>
+		<tr>
+		    <th>Päivämäärä</th>
+		    <th>Laji</th>
+            <th>Työskentely</th>
+            <th>Osaaminen</th>
+            <th>Kommentit</th>
+		</tr>  
+    	<tr th:each = "pupilperformance : ${performances}">
+    		<td th:text="${pupilperformance.lesson.lessonDay}"></td>
+    		<td th:text="${pupilperformance.lesson.sport.name}"></td>
+            <td th:text="${pupilperformance.effort}"></td>
+            <td th:text="${pupilperformance.skills}"></td>
+            <td th:text="${pupilperformance.shortDescription}"></td>
+            <td th:text="${pupilperformance.attendance}"></td>
+ 			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td>   		
+ 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
+    	</tr>
+     </table>
+	 <a href="/pupillist">Takaisin oppilaslistaan</a>    	
+</body>
+</html>

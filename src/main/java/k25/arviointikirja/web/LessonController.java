@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-public class LessionController {
+public class LessonController {
 
     @Autowired
-    private LessonRepository lessionRepository;
+    private LessonRepository lessonRepository;
 
     @Autowired
     private PupilClassRepository pupilClassRepository;
@@ -31,7 +31,7 @@ public class LessionController {
 //show all lessons
 @GetMapping("/lessons")
 public String lessonlist(Model model) {
-    model.addAttribute("lessons", lessionRepository.findAll());
+    model.addAttribute("lessons", lessonRepository.findAll());
     return "lessonlist";
 }
     
@@ -48,7 +48,7 @@ public String addLesson(Model model) {
 //save lesson
 @PostMapping("/saveLesson")
 public String saveLesson(@ModelAttribute Lesson lesson) {
-    lessionRepository.save(lesson);
+    lessonRepository.save(lesson);
     return "redirect:lessons";
 }
 
