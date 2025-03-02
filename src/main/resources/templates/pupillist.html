@@ -3,22 +3,25 @@
 <head>
     <title>Pupillist</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 	<h1>Pupils</h1>
-    <table>
+    <table class="table table-striped">
 		<tr>
 		    <th>Name</th>
 		    <th>Class</th>
+			<th>Show performances</th>
+			<th>Detelte Pupil</th>
 		</tr>  
     	<tr th:each = "pupil : ${pupils}">
     		<td th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
     		<td th:text="${pupil.pupilClass.startYear} + ' ' + ${pupil.pupilClass.classCode}"></td>	
-			<td><a th:href="@{/showPupilPerformances/{pupilId}(pupilId=${pupil.pupilId})}">Performances</a></td>
+			<td><a th:href="@{/showPupilPerformances/{pupilId}(pupilId=${pupil.pupilId})}" class="btn btn-primary">Performances</a></td>
  			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td> -->   		
- 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  		
+ 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}" class="btn btn-danger">Delete</a></td>  		
     	</tr>
      </table>
-	 <a href="/addPupil">Add Pupil</a>    	
+	 <a href="/addPupil" class="btn btn-success">Add Pupil</a>    	
 </body>
 </html>

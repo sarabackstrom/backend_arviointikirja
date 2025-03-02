@@ -53,6 +53,8 @@ public class ArviointikirjaApplication {
 
 			Lesson lesson1 = new Lesson("Pienpelit ja -harjoitteet", LocalDate.of(2025, 2, 11), pupilClass1, sport2);
 			lessonRepository.save(lesson1);
+			Lesson lesson2 = new Lesson("Koripallo", LocalDate.of(2025, 3, 10), pupilClass2, sport1);
+			lessonRepository.save(lesson2);
 
 			Performance performance1 = new Performance(10, 9, "Hyvin pelasi",true, lesson1, pupil1);
 			performanceRepository.save(performance1);

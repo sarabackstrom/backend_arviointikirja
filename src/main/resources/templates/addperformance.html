@@ -1,49 +1,44 @@
+<!-- Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list-->
+
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>AddPerformance</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
     <h1>Add performances</h1>
-    <table>
-        <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Effort</th>
-            <th>Skills</th>
-            <th>Description</th>
-            <th>Attendance</th>
-            <th>Action</th>
-        </tr>
-        <tr th:each="pupil : ${pupils}">
-            <form th:action="@{/savePerformance}" method="post">
-                <!-- Piilotettu oppilaan ID -->
-                <input type="hidden" name="pupilId" th:value="${pupil.pupilId}" />
-
-                <td>
-                    <input type="text" th:value="${pupil.firstName}" readonly />
-                </td>
-                <td>
-                    <input type="text" th:value="${pupil.lastName}" readonly />
-                </td>
-                <td>
-                    <input type="number" name="effort" />
-                </td>
-                <td>
-                    <input type="number" name="skills" />
-                </td>
-                <td>
-                    <textarea name="shortDescription" rows="4" cols="50"></textarea>
-                </td>
-                <td>
-                    <input type="checkbox" name="attendance" />
-                </td>
-                <td>
-                    <input type="submit" value="Save" />
-                </td>
-            </form>
-        </tr>
-    </table>
+    <form action="#" th:action="@{/savePerformances}" th:object="${form}" method="post">
+        <fieldset>
+            <input type="submit" id="submitButton" th:value="Save">
+            <table>
+                <thead>
+                    <th>pupilId</th>
+                    <th>lessonId</th>
+                    <th>skills</th>
+                    <th>effort</th>
+                    <th>shortDescription</th>
+                    <th>attendance</th>
+                </thead>
+                <tbody>
+                    <tr th:each="performance, itemStat : ${form.performances}">
+                        <td><input th:field="*{performances[__${itemStat.index}__].pupil.pupilId}" readonly /></td>
+                        <td><input th:field="*{performances[__${itemStat.index}__].lesson.lessonId}" /></td>
+                        <td><input th:field="*{performances[__${itemStat.index}__].skills}" /></td>
+                        <td><input th:field="*{performances[__${itemStat.index}__].effort}" /></td>
+                        <td><input th:field="*{performances[__${itemStat.index}__].shortDescription}" /></td>
+                        <td><input th:field="*{performances[__${itemStat.index}__].attendance}" /></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </fieldset>
+    </form>
+ 
 </body>
 </html>
+
+        
+   
+
