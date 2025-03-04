@@ -18,7 +18,7 @@
             <label for="classlist">Class</label>
             <select id="classlist" th:field="*{pupilClass}" class="form-control">
                 <option th:each="class: ${pupilclasses}" th:value="${class.classId}"
-                    th:text="${class.startYear}+' ' +${class.classCode}"></option>
+                    th:text="${class.className}"></option>
             </select>
             <div style="clear: both; display: block; height: 10px;"></div>
             

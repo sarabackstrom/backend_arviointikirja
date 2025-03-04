@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Pupil {
@@ -79,6 +80,19 @@ public class Pupil {
     public String toString() {
         return "Pupil [pupilId=" + pupilId + ", firstName=" + firstName + ", lastName=" + lastName + ", pupilClass="
                 + pupilClass + ", performances=" + performances + "]";
+    }
+
+    //Add Performancea varten, vain ajonaikaiseen käyttöön tietokannassa
+
+    @Transient
+    private List<Lesson> lessons = new ArrayList<>();
+
+    public List<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
     }
 
 }

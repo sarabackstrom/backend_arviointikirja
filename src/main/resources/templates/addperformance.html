@@ -11,8 +11,7 @@
     <h1>Add performances</h1>
     <form action="#" th:action="@{/savePerformances}" th:object="${form}" method="post">
         <fieldset>
-            <input type="submit" id="submitButton" th:value="Save">
-            <table>
+            <table class="table table-striped">
                 <thead>
                     <th>pupilId</th>
                     <th>lessonId</th>
@@ -23,8 +22,20 @@
                 </thead>
                 <tbody>
                     <tr th:each="performance, itemStat : ${form.performances}">
-                        <td><input th:field="*{performances[__${itemStat.index}__].pupil.pupilId}" readonly /></td>
-                        <td><input th:field="*{performances[__${itemStat.index}__].lesson.lessonId}" /></td>
+                        <td>
+                            <input type="hidden" th:field="*{performances[__${itemStat.index}__].pupil.pupilId}" />
+                            <span th:text="${performance.pupil.firstName + ' ' + performance.pupil.lastName}"></span>
+                        </td>
+                        <!-- <td><input th:field="*{performances[__${itemStat.index}__].lesson.lessonId}" /></td> -->
+                        <td>
+                            <select th:field="*{performances[__${itemStat.index}__].lesson.lessonId}">
+                                <option value="">Select lesson</option>
+                                <option th:each="lesson : ${performance.pupil.lessons}" 
+                                        th:value="${lesson.lessonId}" 
+                                        th:text="${lesson.lessonDescription + ' - ' + lesson.lessonDay}">
+                                </option>
+                            </select>
+                        </td>
                         <td><input th:field="*{performances[__${itemStat.index}__].skills}" /></td>
                         <td><input th:field="*{performances[__${itemStat.index}__].effort}" /></td>
                         <td><input th:field="*{performances[__${itemStat.index}__].shortDescription}" /></td>
@@ -33,6 +44,7 @@
                     
                 </tbody>
             </table>
+            <input type="submit" id="submitButton" th:value="Save">
         </fieldset>
     </form>
  

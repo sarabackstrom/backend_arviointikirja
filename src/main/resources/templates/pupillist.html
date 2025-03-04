@@ -16,7 +16,7 @@
 		</tr>  
     	<tr th:each = "pupil : ${pupils}">
     		<td th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
-    		<td th:text="${pupil.pupilClass.startYear} + ' ' + ${pupil.pupilClass.classCode}"></td>	
+    		<td th:text="${pupil.pupilClass.className}"></td>	
 			<td><a th:href="@{/showPupilPerformances/{pupilId}(pupilId=${pupil.pupilId})}" class="btn btn-primary">Performances</a></td>
  			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td> -->   		
  			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}" class="btn btn-danger">Delete</a></td>  		

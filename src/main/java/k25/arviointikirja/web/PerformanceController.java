@@ -1,6 +1,7 @@
 package k25.arviointikirja.web;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,9 @@ public class PerformanceController {
 
     //add performance
     @GetMapping("/create")
-    public String showPerformancesForm(Model model) {
+    public String showPerformancesForm(@RequestParam(required = false) Long pupilId, Model model) {
 
+        
         List<Pupil> pupils = pupilRepository.findAll();
         
         // Luo PerformanceCreationDto, joka sisältää kaikki suoritukset
@@ -56,12 +58,15 @@ public class PerformanceController {
         // Luodaan tyhjät suoritukset, joihin lisätään oppilaan id
         for (Pupil pupil : pupils) {
             Performance performance = new Performance();
+            List<Lesson> lessons = lessonRepository.findByPupilClass_classId(pupil.getPupilClass().getClassId());
+            pupil.setLessons(lessons);
             performance.setPupil(pupil);
             performanceForm.addPerformance(performance); // Lisätään suoritus PerformanceCreationDto:n
         }
     
         // Lisätään PerformanceCreationDto malliin --> apuna käytetty: https://www.baeldung.com/thymeleaf-list
         model.addAttribute("form", performanceForm);
+        model.addAttribute("pupils", pupils);
         
         return "addperformance";
     }
