@@ -7,21 +7,24 @@
 </head>
 <body>
 	<h1>Add pupil</h1>
-	<div>
+	<div class="form-group">
 		<form th:object="${pupil}" th:action="@{/savePupil}" action="#" method="post">
+			<div class="form-group">
 		  	<label for="fname">Firstname</label>
-			<input type="text" id="fname" th:field="*{firstName}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
+			<input type="text" id="fname" th:field="*{firstName}" class="form-control" />
+			<div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</div>	
+		</div>
+			<div class="form-group">
 		  	<label for="lname">Lastname</label>
-			<input type="text" id="lname" th:field="*{lastName}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-
+			<input type="text" id="lname" th:field="*{lastName}" class="form-control"  />
+			<div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</div>	
+		</div>
+			<div class="form-group">
 		  	<label for="classlist">Class</label>
 			 <select id="classlist" th:field="*{pupilClass}" class="form-control" style="width: 30%;">
        			<option th:each="class: ${pupilclasses}" th:value="${class.classId}" th:text="${class.className}"></option>
     		</select>
-			
-			<div style="clear: both; display: block; height: 10px;"></div>
+			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 	</div>

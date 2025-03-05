@@ -4,10 +4,23 @@
     <title>Pupilperformances</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-	<h1>Pupil performances</h1>
-    <table class="table table-striped">
+	<h1 th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></h1>
+	<table class="table table-bordered" style="width: 60%;">
+		<tr>
+		<th>Työskentely</th>
+		<th>Taidot</th>
+		<th>Keskiarvo 50/50</th>
+	</tr>
+	<tr>
+		<td th:text="${#numbers.formatDecimal(averageEffort, 1, 2)}"></td>
+		<td th:text="${#numbers.formatDecimal(averageSkills, 1, 2)}"></td>
+		<td th:text="${#numbers.formatDecimal(averageEffortAndSkills, 1, 2)}"></td>
+	</tr>
+	</table>
+    <table class="table table-hover">
 		<tr>
 		    <th>Päivämäärä</th>
 		    <th>Laji</th>
@@ -15,6 +28,7 @@
             <th>Osaaminen</th>
             <th>Kommentit</th>
 			<th>Läsnäolo</th>
+			<th>Muokkaa</th>
 		</tr>  
     	<tr th:each = "pupilperformance : ${performances}">
     		<td th:text="${pupilperformance.lesson.lessonDay}"></td>
@@ -23,9 +37,10 @@
             <td th:text="${pupilperformance.skills}"></td>
             <td th:text="${pupilperformance.shortDescription}"></td>
             <td th:text="${pupilperformance.attendance}"></td>
- 			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td>   		
- 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
+ 			<td><a th:href="@{/editPerformance/{id}(id=${pupilperformance.performanceId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
+ 			<!-- <td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
     	</tr>
+
      </table>
 	 <a href="/pupillist">Takaisin oppilaslistaan</a>    	
 </body>

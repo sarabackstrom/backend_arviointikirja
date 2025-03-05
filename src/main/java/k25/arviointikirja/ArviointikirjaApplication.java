@@ -43,8 +43,14 @@ public class ArviointikirjaApplication {
 
 			Sport sport1 = new Sport("Koripallo");
 			Sport sport2 = new Sport("Lentopallo");
+			Sport sport3 = new Sport("Uinti");
+			Sport sport4 = new Sport("Luistelu");
+			Sport sport5 = new Sport("Jääpelit");
 			sportRepository.save(sport1);
 			sportRepository.save(sport2);
+			sportRepository.save(sport3);
+			sportRepository.save(sport4);
+			sportRepository.save(sport5);
 
 			Pupil pupil1 = new Pupil("Sara", "Bäckström", pupilClass1);
 			pupilRepository.save(pupil1);

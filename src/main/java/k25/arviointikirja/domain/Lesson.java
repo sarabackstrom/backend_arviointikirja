@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Lesson {
@@ -21,12 +22,15 @@ public class Lesson {
     private Long lessonId;
     @Column(columnDefinition = "TEXT")
     private String lessonDescription;
+    
+    @NotNull(message = "Päivämäärä ei voi olla tyhjä. Valitse päivämäärä valikosta.")
     private LocalDate lessonDay;
 
     @ManyToOne
     @JoinColumn(name = "classId")
     private PupilClass pupilClass;
 
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lesson")
     private List<Performance> performances = new ArrayList<>();
 

@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PerformanceRepository extends CrudRepository<Performance, Long> {
     List<Performance> findByPupilPupilId(Long pupilId);
+    List<Performance> findByPupil(Pupil pupil);
 }

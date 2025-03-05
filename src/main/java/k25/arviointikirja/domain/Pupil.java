@@ -12,13 +12,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Pupil {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pupilId;
+
+    @NotEmpty(message = "Etunimi ei voi olla tyhjä.")
     private String firstName;
+
+    @NotEmpty(message = "Sukunimi ei voi olla tyhjä.")
     private String lastName;
 
     @ManyToOne

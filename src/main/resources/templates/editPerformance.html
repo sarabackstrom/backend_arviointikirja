@@ -1,0 +1,45 @@
+<!-- Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list-->
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Muokkaa suoritusta</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Muokkaa suoritusta</h1>
+    <form action="#" th:action="@{/saveEditedPerformance}" th:object="${performance}" method="post">
+        <input type="hidden" th:field="*{performanceId}" class="form-control" />
+        <input type="hidden" th:field="*{lesson.lessonId}" class="form-control" />
+        <input type="hidden" th:field="*{pupil.pupilId}" class="form-control" />
+        <p>Päivämäärä: <span th:text="${performance.lesson.lessonDay}"></span></p>
+        <p>Laji: <span th:text="${performance.lesson.sport.name}"></span></p>
+
+        <div class="form-group">
+        <label for="skills">Osaaminen</label>
+        <input type="text" id="skills" th:field="*{skills}" class="form-control"/>
+		</div>
+
+        <div class="form-group">
+        <label for="effort">Työskentely</label>
+        <input type="text" id="effort" th:field="*{effort}" class="form-control" />
+		</div>
+
+        <div class="form-group">
+        <label for="attendance">Läsnäolo</label>
+        <input type="checkbox" id="attendance" th:field="*{attendance}"  />
+        </div>
+
+        <div class="form-group">
+        <label for="shortDescription">Kommentit</label>
+        <input type="text" id="shortDescription" th:field="*{shortDescription}" class="form-control" />
+		</div>
+        
+
+    <button type="submit" id="submitButton" class="btn btn-primary">Tallenna</button>
+
+    </form>
+ 
+</body>
+</html>

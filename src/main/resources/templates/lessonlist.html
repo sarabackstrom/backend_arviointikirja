@@ -1,28 +1,31 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lessonlist</title>
+    <title>Oppitunnit</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
 </head>
 <body>
-	<h1>Lessons</h1>
-    <table class="table table-striped">
+	<h1>Oppituntien päiväkirja</h1>
+    <table class="table table-hover">
 		<tr>
 		    <th>Päivämäärä</th>
 		    <th>Luokka</th>
             <th>Laji</th>
             <th>Mitä tehtiin</th>
+			<th>Muokkaa</th>
 		</tr>  
     	<tr th:each = "lesson : ${lessons}">
     		<td th:text="${lesson.lessonDay}"></td>
     		<td th:text="${lesson.pupilClass.className}"></td>
             <td th:text="${lesson.sport.name}"></td>
             <td th:text="${lesson.lessonDescription}"></td>	
- 			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td>   		
- 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
+ 			<td><a th:href="@{/editLesson/{id}(id=${lesson.lessonId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
+ 			<!-- <td><a th:href="@{/deleteLesson/{id}(id=${lesson.lessonId})}">Delete</a></td> // Jos oppitunti poisteaan suoritukset katoaa-->
     	</tr>
      </table>
-	 <a href="/addLesson">Add Lesson</a>    	
+	 <a href="/addLesson" class="btn btn-success">Lisää oppitunti</a>    	
 </body>
 </html>

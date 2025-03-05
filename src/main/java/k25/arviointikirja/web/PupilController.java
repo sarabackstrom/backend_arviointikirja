@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import k25.arviointikirja.domain.Performance;
 import k25.arviointikirja.domain.PerformanceRepository;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -40,7 +43,11 @@ private PerformanceRepository performanceRepository;
 
     //Save new student, PITÄISIKÖ OLLA REDERICT
     @PostMapping("/savePupil")
-    public String savePupil(@ModelAttribute Pupil pupil){
+    public String savePupil(@Valid @ModelAttribute Pupil pupil, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("pupilclasses", pupilClassRepository.findAll()); 
+            return "addpupil";
+        }
         pupilRepository.save(pupil);
         return "redirect:pupillist";
     }
@@ -60,12 +67,12 @@ private PerformanceRepository performanceRepository;
     }
     
     //show performance by pupilId
-@GetMapping("/showPupilPerformances/{pupilId}")
+/*@GetMapping("/showPupilPerformances/{pupilId}")
 public String showPerformances(@PathVariable Long pupilId, Model model) {
     List<Performance> performances = performanceRepository.findByPupilPupilId(pupilId);
     model.addAttribute("performances", performances);
     return "pupilperformances";
-}
+}*/
 
     
 }
