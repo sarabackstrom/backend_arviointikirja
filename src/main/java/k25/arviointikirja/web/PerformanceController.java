@@ -43,7 +43,7 @@ public class PerformanceController {
     @Autowired
     private PupilClassRepository pupilClassRepository;
 
-    
+  //Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list
     @GetMapping("/create")
     public String showPerformancesForm(@RequestParam(required = false) Long classId, Model model) {
         List<Pupil> pupils = new ArrayList<>();

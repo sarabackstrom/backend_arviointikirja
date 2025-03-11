@@ -3,6 +3,9 @@ package k25.arviointikirja.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +16,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class Pupil {
@@ -27,12 +29,14 @@ public class Pupil {
     @NotEmpty(message = "Sukunimi ei voi olla tyhjä.")
     private String lastName;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn (name = "classId")
     private PupilClass pupilClass;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pupil")
     private List<Performance> performances = new ArrayList<>();
+
 
     public Pupil() {}
 

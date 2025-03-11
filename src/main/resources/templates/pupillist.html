@@ -8,19 +8,24 @@
 </head>
 <body>
 	<h1>Oppilaat</h1>
+	<span sec:authentication="name">Name</span> 
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
+	</form>
+
     <table class="table table-hover">
 		<tr>
 		    <th>Nimi</th>
 		    <th>Luokka</th>
 			<th>Suoritukset</th>
-			<th>Poista</th>
+			<!-- <th sec:authorize="hasAuthority('ADMIN')"--><th>Poista</th>
 		</tr>  
     	<tr th:each = "pupil : ${pupils}">
     		<td th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
     		<td th:text="${pupil.pupilClass.className}"></td>	
 			<td><a th:href="@{/showPupilPerformances/{pupilId}(pupilId=${pupil.pupilId})}"><i class="fas fa-medal"></i></a></td>
  			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td> -->   		
- 			<td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}"><i class="fas fa-trash"></i></a></td>  		
+ 			<!--td sec:authorize="hasAuthority('ADMIN')"--><th><a th:href="@{/delete/{id}(id=${pupil.pupilId})}"><i class="fas fa-trash"></i></a></td>  		
     	</tr>
      </table>
 	 <a href="/addPupil" class="btn btn-success">Add Pupil</a>    	

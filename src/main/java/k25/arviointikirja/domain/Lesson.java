@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,14 +29,15 @@ public class Lesson {
     @NotNull(message = "Päivämäärä ei voi olla tyhjä. Valitse päivämäärä valikosta.")
     private LocalDate lessonDay;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "classId")
     private PupilClass pupilClass;
 
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lesson")
     private List<Performance> performances = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sportId")
     private Sport sport;

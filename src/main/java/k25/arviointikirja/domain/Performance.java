@@ -1,5 +1,7 @@
 package k25.arviointikirja.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,10 +19,12 @@ public class Performance {
     private String shortDescription;
     private boolean attendance;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "lessonId")
     private Lesson lesson;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "pupilId")
     private Pupil pupil;

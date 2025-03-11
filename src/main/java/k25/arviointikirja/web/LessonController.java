@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 
@@ -39,7 +36,7 @@ public class LessonController {
     private SportRepository sportRepository;
 
 //show all lessons
-@GetMapping("/lessons")
+@GetMapping("/lessonlist")
 public String lessonlist(Model model) {
     model.addAttribute("lessons", lessonRepository.findAll());
     return "lessonlist";
@@ -64,13 +61,13 @@ public String saveLesson(@Valid @ModelAttribute Lesson lesson, BindingResult bin
         return "addLesson";
     }
     lessonRepository.save(lesson);
-    return "redirect:lessons";
+    return "redirect:lessonlist";
 }
 
 @PostMapping("/saveEditedLesson")
 public String saveEditedLesson(@ModelAttribute Lesson lesson) {
     lessonRepository.save(lesson);
-    return "redirect:lessons";
+    return "redirect:lessonlist";
 }
 
 @GetMapping("/editLesson/{id}")
@@ -90,7 +87,7 @@ public String editLesson(@PathVariable("id") Long id, Model model) {
 @GetMapping("/deleteLesson/{id}")
 public String deleteLesson(@PathVariable("id") Long LessonId, Model model) {
     lessonRepository.deleteById(LessonId);
-    return "redirect:/lessons";
+    return "redirect:/lessonlist";
 }*/
 
 
