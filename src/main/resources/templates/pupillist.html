@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Oppilaslista</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,25 +8,54 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+
+<!-- Navigointipalkki -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<a class="navbar-brand" href="#">Oppilasjärjestelmä</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<!-- Linkit navigointipalkkiin -->
+			<li class="nav-item">
+				<a class="nav-link" href="/pupillist">Oppilaat</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/lessonlist">Tunnit</a>
+			</li>
+			<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+				<a class="nav-link" href="/create">Luo uusi</a>
+			</li>
+			<li class="nav-item">
+				<form th:action="@{/logout}" method="post" class="nav-link p-0">
+					<input type="submit" value="Kirjaudu ulos" class="btn btn-link text-white"/>
+				</form>
+			</li>
+		</ul>
+	</div>
+</nav>
+<!-- Navigaatio loppuu -->
+
 	<h1>Oppilaat</h1>
 	<span sec:authentication="name">Name</span> 
-	<form th:action="@{/logout}" method="post">
+	<!-- <form th:action="@{/logout}" method="post">
 		<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
-	</form>
+	</form>-->
 
     <table class="table table-hover">
 		<tr>
 		    <th>Nimi</th>
 		    <th>Luokka</th>
 			<th>Suoritukset</th>
-			<!-- <th sec:authorize="hasAuthority('ADMIN')"--><th>Poista</th>
+			<th sec:authorize="hasAuthority('ADMIN')">Poista</th>
 		</tr>  
     	<tr th:each = "pupil : ${pupils}">
     		<td th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
     		<td th:text="${pupil.pupilClass.className}"></td>	
 			<td><a th:href="@{/showPupilPerformances/{pupilId}(pupilId=${pupil.pupilId})}"><i class="fas fa-medal"></i></a></td>
- 			<!-- <td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td> -->   		
- 			<!--td sec:authorize="hasAuthority('ADMIN')"--><th><a th:href="@{/delete/{id}(id=${pupil.pupilId})}"><i class="fas fa-trash"></i></a></td>  		
+ 			<!--<td><a th:href="@{/editPupil/{id}(id=${pupil.pupilId})}">Edit</a></td> --> 		
+ 			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${pupil.pupilId})}"><i class="fas fa-trash"></i></a></td>  		
     	</tr>
      </table>
 	 <a href="/addPupil" class="btn btn-success">Add Pupil</a>    	

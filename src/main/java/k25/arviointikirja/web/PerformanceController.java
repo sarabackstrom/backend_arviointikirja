@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -88,7 +89,8 @@ public String savePerformances(@ModelAttribute PerformanceCreationDto form,
 }
 
   
-  @GetMapping("/editPerformance/{id}")
+@PreAuthorize("hasAuthority('ADMIN')")
+@GetMapping("/editPerformance/{id}")
 public String editPerformance(@PathVariable("id") Long performanceId, Model model) {
     Optional<Performance> performance = performanceRepository.findById(performanceId);
     if (performance.isPresent()) {

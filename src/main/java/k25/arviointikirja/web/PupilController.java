@@ -61,7 +61,7 @@ public class PupilController {
     }
 
     //Delete pupil
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete/{id}")
     public String deletePupil(@PathVariable("id") Long pupilId, Model model) {
         pupilRepository.deleteById(pupilId);

@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Pupilperformances</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -28,7 +29,7 @@
             <th>Osaaminen</th>
             <th>Kommentit</th>
 			<th>Läsnäolo</th>
-			<th>Muokkaa</th>
+			<th th sec:authorize="hasAuthority('ADMIN')">Muokkaa</th>
 		</tr>  
     	<tr th:each = "pupilperformance : ${performances}">
     		<td th:text="${pupilperformance.lesson.lessonDay}"></td>
@@ -37,7 +38,7 @@
             <td th:text="${pupilperformance.skills}"></td>
             <td th:text="${pupilperformance.shortDescription}"></td>
             <td th:text="${pupilperformance.attendance}"></td>
- 			<td><a th:href="@{/editPerformance/{id}(id=${pupilperformance.performanceId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
+ 			<td th sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editPerformance/{id}(id=${pupilperformance.performanceId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
  			<!-- <td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
     	</tr>
 

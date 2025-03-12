@@ -33,6 +33,7 @@ public WebSecurityConfig(UserDetailsService userDetailsService) {
 				authorize -> authorize
 				.requestMatchers("/css/**").permitAll()
 				.requestMatchers(WHITE_LIST_URLS).permitAll()
+                .requestMatchers("/create").hasAuthority("ADMIN")
 				.anyRequest().authenticated())
 				.formLogin(formlogin -> 
 					formlogin.loginPage("/login")

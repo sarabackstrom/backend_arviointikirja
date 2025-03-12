@@ -71,12 +71,10 @@ public class AppUser {
         this.role = role;
     }
 
-    public Pupil getPupil() {
-        return pupil;
-    }
-
-    public void setPupil(Pupil pupil) {
-        this.pupil = pupil;
+    @Override
+    public String toString() {
+        return "AppUser [id=" + id + ", username=" + username + ", passwordHash=" + passwordHash + ", role=" + role
+                + "]";
     }
 
 }

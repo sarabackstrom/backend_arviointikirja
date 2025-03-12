@@ -3,6 +3,7 @@ package k25.arviointikirja.web;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,6 +44,7 @@ public String lessonlist(Model model) {
 }
     
 
+@PreAuthorize("hasAuthority('ADMIN')")
 //add lesson
 @GetMapping("/addLesson")
 public String addLesson(Model model) {
@@ -70,6 +72,7 @@ public String saveEditedLesson(@ModelAttribute Lesson lesson) {
     return "redirect:lessonlist";
 }
 
+@PreAuthorize("hasAuthority('ADMIN')")
 @GetMapping("/editLesson/{id}")
 public String editLesson(@PathVariable("id") Long id, Model model) {
     Optional<Lesson> lesson = lessonRepository.findById(id);

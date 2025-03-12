@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Oppitunnit</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -15,17 +16,17 @@
 		    <th>Luokka</th>
             <th>Laji</th>
             <th>Mitä tehtiin</th>
-			<th>Muokkaa</th>
+			<th sec:authorize="hasAuthority('ADMIN')">Muokkaa</th>
 		</tr>  
     	<tr th:each = "lesson : ${lessons}">
     		<td th:text="${lesson.lessonDay}"></td>
     		<td th:text="${lesson.pupilClass.className}"></td>
             <td th:text="${lesson.sport.name}"></td>
             <td th:text="${lesson.lessonDescription}"></td>	
- 			<td><a th:href="@{/editLesson/{id}(id=${lesson.lessonId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
+ 			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editLesson/{id}(id=${lesson.lessonId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
  			<!-- <td><a th:href="@{/deleteLesson/{id}(id=${lesson.lessonId})}">Delete</a></td> // Jos oppitunti poisteaan suoritukset katoaa-->
     	</tr>
      </table>
-	 <a href="/addLesson" class="btn btn-success">Lisää oppitunti</a>    	
+	 <a href="/addLesson" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Lisää oppitunti</a>    	
 </body>
 </html>
