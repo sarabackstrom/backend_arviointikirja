@@ -11,7 +11,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <!-- Navigointipalkki -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-	<a class="navbar-brand" href="#">Oppilasjärjestelmä</a>
+	<a class="navbar-brand" href="#">Arviointikirja</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -19,13 +19,13 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 		<ul class="navbar-nav">
 			<!-- Linkit navigointipalkkiin -->
 			<li class="nav-item">
-				<a class="nav-link" href="/pupillist">Oppilaat</a>
+				<a class="nav-link" href="/pupillist">Oppilaat ja suoritukset</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/lessonlist">Tunnit</a>
+				<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
 			</li>
 			<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-				<a class="nav-link" href="/create">Luo uusi</a>
+				<a class="nav-link" href="/create">Lisää suorituksia</a>
 			</li>
 			<li class="nav-item">
 				<form th:action="@{/logout}" method="post" class="nav-link p-0">
@@ -39,9 +39,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 	<h1>Oppilaat</h1>
 	<span sec:authentication="name">Name</span> 
-	<!-- <form th:action="@{/logout}" method="post">
-		<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
-	</form>-->
 
     <table class="table table-hover">
 		<tr>
@@ -58,6 +55,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
  			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${pupil.pupilId})}"><i class="fas fa-trash"></i></a></td>  		
     	</tr>
      </table>
-	 <a href="/addPupil" class="btn btn-success">Add Pupil</a>    	
+	 <a href="/addPupil" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Add Pupil</a>    	
 </body>
 </html>

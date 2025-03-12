@@ -34,6 +34,7 @@ public class PupilController {
         return "login";
     }
     
+    @PreAuthorize("hasAuthority('ADMIN')")
     //Add new pupil
     @GetMapping(value = "/addPupil")
     public String addPupil(Model model){

@@ -6,6 +6,34 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+	<!-- Navigointipalkki -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<a class="navbar-brand" href="#">Arviointikirja</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<!-- Linkit navigointipalkkiin -->
+			<li class="nav-item">
+				<a class="nav-link" href="/pupillist">Oppilaat ja suoritukset</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
+			</li>
+			<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+				<a class="nav-link" href="/create">Lisää suorituksia</a>
+			</li>
+			<li class="nav-item">
+				<form th:action="@{/logout}" method="post" class="nav-link p-0">
+					<input type="submit" value="Kirjaudu ulos" class="btn btn-link text-white"/>
+				</form>
+			</li>
+		</ul>
+	</div>
+</nav>
+<!-- Navigaatio loppuu -->
+ 
 	<h1>Add pupil</h1>
 	<div class="form-group">
 		<form th:object="${pupil}" th:action="@{/savePupil}" action="#" method="post">
