@@ -29,6 +29,9 @@ public class PupilController {
     @Autowired
     private PupilClassRepository pupilClassRepository;
 
+    @Autowired
+    UserService userService;
+
    @RequestMapping(value="/login")
     public String login() {	
         return "login";
@@ -58,6 +61,8 @@ public class PupilController {
     @GetMapping("/pupillist")
     public String pupilList(Model model) {
         model.addAttribute("pupils", pupilRepository.findAll());
+        Pupil authenticatedPupil = userService.getAuthenticatedPupil();
+        model.addAttribute("authenticatedPupil", authenticatedPupil);
         return "pupillist";
     }
 

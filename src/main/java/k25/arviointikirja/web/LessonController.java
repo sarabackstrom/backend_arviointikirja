@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 
 import k25.arviointikirja.domain.Lesson;
 import k25.arviointikirja.domain.LessonRepository;
+import k25.arviointikirja.domain.Pupil;
 import k25.arviointikirja.domain.PupilClassRepository;
 import k25.arviointikirja.domain.SportRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,10 +37,15 @@ public class LessonController {
     @Autowired
     private SportRepository sportRepository;
 
+    @Autowired
+    UserService userService;
+
 //show all lessons
 @GetMapping("/lessonlist")
 public String lessonlist(Model model) {
     model.addAttribute("lessons", lessonRepository.findAll());
+    Pupil authenticatedPupil = userService.getAuthenticatedPupil();
+        model.addAttribute("authenticatedPupil", authenticatedPupil);
     return "lessonlist";
 }
     

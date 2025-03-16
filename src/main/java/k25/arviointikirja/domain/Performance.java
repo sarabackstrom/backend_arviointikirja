@@ -18,6 +18,7 @@ public class Performance {
     private int effort;
     private String shortDescription;
     private boolean attendance;
+    private boolean pupilAddsPerformance;
 
     @JsonIgnore
     @ManyToOne
@@ -30,6 +31,33 @@ public class Performance {
     private Pupil pupil;
 
     public Performance() {}
+
+    public Performance(int skills, int effort, String shortDescription, boolean attendance,
+            boolean pupilAddsPerformance, Lesson lesson, Pupil pupil) {
+        this.skills = skills;
+        this.effort = effort;
+        this.shortDescription = shortDescription;
+        this.attendance = attendance;
+        this.pupilAddsPerformance = pupilAddsPerformance;
+        this.lesson = lesson;
+        this.pupil = pupil;
+    }
+
+    public Performance(boolean attendance, boolean pupilAddsPerformance, Lesson lesson, Pupil pupil) {
+        this.attendance = attendance;
+        this.pupilAddsPerformance = pupilAddsPerformance;
+        this.lesson = lesson;
+        this.pupil = pupil;
+    }
+
+    public Performance(String shortDescription, boolean attendance, boolean pupilAddsPerformance, Lesson lesson,
+            Pupil pupil) {
+        this.shortDescription = shortDescription;
+        this.attendance = attendance;
+        this.pupilAddsPerformance = pupilAddsPerformance;
+        this.lesson = lesson;
+        this.pupil = pupil;
+    }
 
     public Performance(int skills, int effort, String shortDescription, boolean attendance, Lesson lesson,
             Pupil pupil) {
@@ -111,12 +139,27 @@ public class Performance {
         this.pupil = pupil;
     }
 
-    @Override
+    
+    public boolean isPupilAddsPerformance() {
+        return pupilAddsPerformance;
+    }
+
+    public void setPupilAddsPerformance(boolean pupilAddsPerformance) {
+        this.pupilAddsPerformance = pupilAddsPerformance;
+    }
+
+   /* @Override
     public String toString() {
         return "Performance [performanceId=" + performanceId + ", skills=" + skills + ", effort=" + effort
                 + ", shortDescription=" + shortDescription + ", attendance=" + attendance + ", lesson=" + lesson
                 + ", pupil=" + pupil + "]";
-    }
+    }*/ 
 
+    @Override
+    public String toString() {
+        return "Performance [performanceId=" + performanceId + ", skills=" + skills + ", effort=" + effort
+                + ", shortDescription=" + shortDescription + ", attendance=" + attendance + ", pupilAddsPerformance="
+                + pupilAddsPerformance + ", lesson=" + lesson + ", pupil=" + pupil + "]";
+    }
 
 }

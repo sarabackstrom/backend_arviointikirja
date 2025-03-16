@@ -40,9 +40,11 @@ public class ArviointikirjaApplication {
 
 			PupilClass pupilClass1 = new PupilClass(2024, "A", "8A");
 			PupilClass pupilClass2 = new PupilClass(2024, "B", "8B");
+			PupilClass teacher = new PupilClass(2025, "OPE", "Sara-ope");
 			if(pupilClassRepository.count() == 0){
 			pupilClassRepository.save(pupilClass1);
-			pupilClassRepository.save(pupilClass2);}
+			pupilClassRepository.save(pupilClass2);
+		pupilClassRepository.save(teacher);}
 
 			Sport sport1 = new Sport("Koripallo");
 			Sport sport2 = new Sport("Lentopallo");
@@ -56,11 +58,13 @@ public class ArviointikirjaApplication {
 			sportRepository.save(sport4);
 			sportRepository.save(sport5);}
 
-			Pupil pupil1 = new Pupil("Sara", "Bäckström", pupilClass1);
+			Pupil pupil1 = new Pupil("Pirjo", "Porkkana", pupilClass1);
 			Pupil pupil2 = new Pupil("Pekka", "Puupää", pupilClass2);
+			Pupil teacher1 = new Pupil("Sara", "Bäckström", teacher);
 			if(pupilRepository.count() == 0){
 			pupilRepository.save(pupil1);
-			pupilRepository.save(pupil2);}
+			pupilRepository.save(pupil2);
+		pupilRepository.save(teacher1);}
 
 			Lesson lesson1 = new Lesson("Pienpelit ja -harjoitteet", LocalDate.of(2025, 2, 11), pupilClass1, sport2);
 			Lesson lesson2 = new Lesson("Koripallo", LocalDate.of(2025, 3, 10), pupilClass2, sport1);
@@ -69,13 +73,13 @@ public class ArviointikirjaApplication {
 			lessonRepository.save(lesson2);}
 
 			Performance performance1 = new Performance(10, 9, "Hyvin pelasi",true, lesson1, pupil1);
-			Performance performance2 = new Performance(7, 6, "Laiskaa",true, lesson2, pupil1);
+			Performance performance2 = new Performance(7, 6, "Laiskaa",true, lesson2, pupil2);
 			if(performanceRepository.count() == 0){
 			performanceRepository.save(performance1);
 			performanceRepository.save(performance2);}
 
-			AppUser user1 = new AppUser("user", "$2a$10$eHim7bV7DQWPo56u61UiQ.Mnygwm3M1EpSrW/WWLPDypjLKb7TKji", "USER");
-			AppUser user2 = new AppUser("admin", "$2a$10$EoyrFUzDQ9ldC158NyNAo..bzj2E/FsdY/fzviP.kfL0tnYvmJP4G", "ADMIN");
+			AppUser user1 = new AppUser("user", "$2a$10$eHim7bV7DQWPo56u61UiQ.Mnygwm3M1EpSrW/WWLPDypjLKb7TKji", "USER", pupil1);
+			AppUser user2 = new AppUser("admin", "$2a$10$EoyrFUzDQ9ldC158NyNAo..bzj2E/FsdY/fzviP.kfL0tnYvmJP4G", "ADMIN", teacher1);
 			if(aRepository.count() == 0){
 			aRepository.save(user1);
 			aRepository.save(user2);}

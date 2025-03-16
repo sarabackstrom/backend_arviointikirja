@@ -9,43 +9,49 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 </head>
 <body>
 
-<!-- Navigointipalkki -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-	<a class="navbar-brand" href="#">Arviointikirja</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarNav">
-		<ul class="navbar-nav">
-			<!-- Linkit navigointipalkkiin -->
-			<li class="nav-item">
-				<a class="nav-link" href="/pupillist">Oppilaat ja suoritukset</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
-			</li>
-			<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-				<a class="nav-link" href="/create">Lisää suorituksia</a>
-			</li>
-			<li class="nav-item">
-				<form th:action="@{/logout}" method="post" class="nav-link p-0">
-					<input type="submit" value="Kirjaudu ulos" class="btn btn-link text-white"/>
-				</form>
-			</li>
-		</ul>
-	</div>
-</nav>
-<!-- Navigaatio loppuu -->
+	<!-- Navigointipalkki -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="#">Arviointikirja</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<!-- Linkit navigointipalkkiin -->
+				<li class="nav-item">
+					<a class="nav-link" href="/pupillist" sec:authorize="hasAuthority('ADMIN')">Oppilaat ja suoritukset</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/pupillist" sec:authorize="hasAuthority('USER')">Omat suoritukset</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
+				</li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+					<a class="nav-link" href="/create">Lisää suorituksia</a>
+				</li>
+				<li class="nav-item" sec:authorize="hasAuthority('USER')">
+					<a class="nav-link" href="/pupilAddPerformance">Lisää suoritus</a>
+				</li>
+				<li class="nav-item">
+					<form th:action="@{/logout}" method="post" class="nav-link p-0">
+						<input type="submit" value="Kirjaudu ulos" class="btn btn-link text-white"/>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<!-- Navigaatio loppuu -->
 
 	<h1>Oppilaat</h1>
 	<span sec:authentication="name">Name</span> 
 
-    <table class="table table-hover">
+    <table class="table table-hover" sec:authorize="hasAuthority('ADMIN')">
 		<tr>
 		    <th>Nimi</th>
 		    <th>Luokka</th>
 			<th>Suoritukset</th>
-			<th sec:authorize="hasAuthority('ADMIN')">Poista</th>
+			<th >Poista</th>
 		</tr>  
     	<tr th:each = "pupil : ${pupils}">
     		<td th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
@@ -55,6 +61,26 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
  			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${pupil.pupilId})}"><i class="fas fa-trash"></i></a></td>  		
     	</tr>
      </table>
-	 <a href="/addPupil" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Add Pupil</a>    	
+	 <a href="/addPupil" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Add Pupil</a>
+	 <table class="table table-hover" sec:authorize="hasAuthority('USER')">
+		<tr>
+			<th>Nimi</th>
+			<th>Luokka</th>
+			<th>Suoritukset</th>
+		</tr>  
+		<tr th:each="pupil : ${pupils}" th:if="${authenticatedPupil.pupilId == pupil.pupilId}">
+			<!-- Näytetään vain oma oppilas -->
+			<td th:if="${pupil.firstName + ' ' + pupil.lastName }"
+				th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></td>
+			<td th:if="${pupil.firstName + ' ' + pupil.lastName}"
+				th:text="${pupil.pupilClass.className}"></td>
+			<td th:if="${pupil.firstName + ' ' + pupil.lastName}">
+				<a th:href="@{/showPupilPerformances/{pupilId}(pupilId=${pupil.pupilId})}">
+					<i class="fas fa-medal"></i>
+				</a>
+			</td>
+		</tr>
+	</table>
+		 
 </body>
 </html>

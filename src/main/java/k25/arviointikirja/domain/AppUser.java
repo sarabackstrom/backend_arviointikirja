@@ -28,14 +28,19 @@ public class AppUser {
     @Column(name = "role", nullable = false)
     private String role;
 
+    @ManyToOne
+    @JoinColumn(name = "pupilId")
+    private Pupil pupil;
+
 
     public AppUser(){
     }
 
-    public AppUser(String username, String passwordHash, String role) {
+    public AppUser(String username, String passwordHash, String role, Pupil pupil) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
+        this.pupil = pupil;
     }
 
 
@@ -71,10 +76,18 @@ public class AppUser {
         this.role = role;
     }
 
+    public Pupil getPupil() {
+        return pupil;
+    }
+
+    public void setPupil(Pupil pupil) {
+        this.pupil = pupil;
+    }
+
     @Override
     public String toString() {
         return "AppUser [id=" + id + ", username=" + username + ", passwordHash=" + passwordHash + ", role=" + role
-                + "]";
+                + ", pupil=" + pupil + "]";
     }
 
 }

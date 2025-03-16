@@ -9,34 +9,41 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 </head>
 <body>
 	<!-- Navigointipalkki -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-	<a class="navbar-brand" href="#">Arviointikirja</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarNav">
-		<ul class="navbar-nav">
-			<!-- Linkit navigointipalkkiin -->
-			<li class="nav-item">
-				<a class="nav-link" href="/pupillist">Oppilaat ja suoritukset</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
-			</li>
-			<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-				<a class="nav-link" href="/create">Lisää suorituksia</a>
-			</li>
-			<li class="nav-item">
-				<form th:action="@{/logout}" method="post" class="nav-link p-0">
-					<input type="submit" value="Kirjaudu ulos" class="btn btn-link text-white"/>
-				</form>
-			</li>
-		</ul>
-	</div>
-</nav>
-<!-- Navigaatio loppuu -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="#">Arviointikirja</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<!-- Linkit navigointipalkkiin -->
+				<li class="nav-item">
+					<a class="nav-link" href="/pupillist" sec:authorize="hasAuthority('ADMIN')">Oppilaat ja suoritukset</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/pupillist" sec:authorize="hasAuthority('USER')">Omat suoritukset</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
+				</li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+					<a class="nav-link" href="/create">Lisää suorituksia</a>
+				</li>
+				<li class="nav-item" sec:authorize="hasAuthority('USER')">
+					<a class="nav-link" href="/pupilAddPerformance">Lisää suoritus</a>
+				</li>
+				<li class="nav-item">
+					<form th:action="@{/logout}" method="post" class="nav-link p-0">
+						<input type="submit" value="Kirjaudu ulos" class="btn btn-link text-white"/>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<!-- Navigaatio loppuu -->
 	<h1 th:text="${pupil.firstName} + ' ' + ${pupil.lastName}"></h1>
-	<table class="table table-bordered" style="width: 60%;">
+	<p sec:authorize="hasAuthority('ADMIN')">Opettajan arviot</p>
+	<table class="table table-bordered" style="width: 60%;" sec:authorize="hasAuthority('ADMIN')">
 		<tr>
 		<th>Työskentely</th>
 		<th>Taidot</th>
@@ -46,6 +53,19 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 		<td th:text="${#numbers.formatDecimal(averageEffort, 1, 2)}"></td>
 		<td th:text="${#numbers.formatDecimal(averageSkills, 1, 2)}"></td>
 		<td th:text="${#numbers.formatDecimal(averageEffortAndSkills, 1, 2)}"></td>
+	</tr>
+	</table>
+	<p>Oppilaan arviot</p>
+	<table class="table table-bordered" style="width: 60%;">
+		<tr>
+		<th>Työskentely</th>
+		<th>Taidot</th>
+		<th>Keskiarvo 50/50</th>
+	</tr>
+	<tr>
+		<td th:text="${#numbers.formatDecimal(averageEffort2, 1, 2)}"></td>
+		<td th:text="${#numbers.formatDecimal(averageSkills2, 1, 2)}"></td>
+		<td th:text="${#numbers.formatDecimal(averageEffortAndSkills2, 1, 2)}"></td>
 	</tr>
 	</table>
     <table class="table table-hover">
@@ -58,7 +78,21 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 			<th>Läsnäolo</th>
 			<th th sec:authorize="hasAuthority('ADMIN')">Muokkaa</th>
 		</tr>  
-    	<tr th:each = "pupilperformance : ${performances}">
+    	<tr th:each = "pupilperformance : ${performances}" 
+		th:classappend="${pupilperformance.pupilAddsPerformance ? 'table-warning' : ''}" sec:authorize="hasAuthority('ADMIN')">
+    		<td th:text="${pupilperformance.lesson.lessonDay}"></td>
+    		<td th:text="${pupilperformance.lesson.sport.name}"></td>
+            <td th:text="${pupilperformance.effort}"></td>
+            <td th:text="${pupilperformance.skills}"></td>
+            <td th:text="${pupilperformance.shortDescription}"></td>
+            <td th:text="${pupilperformance.attendance}"></td>
+ 			<td th sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editPerformance/{id}(id=${pupilperformance.performanceId})}"><i class="fas fa-pencil-alt"></i></a></td>   		
+ 			<!-- <td><a th:href="@{/delete/{id}(id=${pupil.pupilId})}">Delete</a></td>  	--> 	
+    	</tr>
+
+		<tr th:each = "pupilperformance : ${performances}" 
+		 sec:authorize="hasAuthority('USER')"
+		 th:if="${pupilperformance.pupilAddsPerformance == true}">
     		<td th:text="${pupilperformance.lesson.lessonDay}"></td>
     		<td th:text="${pupilperformance.lesson.sport.name}"></td>
             <td th:text="${pupilperformance.effort}"></td>

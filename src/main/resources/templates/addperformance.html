@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<!-- Navigointipalkki -->
+ 	<!-- Navigointipalkki -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 	<a class="navbar-brand" href="#">Arviointikirja</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,13 +19,19 @@
 		<ul class="navbar-nav">
 			<!-- Linkit navigointipalkkiin -->
 			<li class="nav-item">
-				<a class="nav-link" href="/pupillist">Oppilaat ja suoritukset</a>
+				<a class="nav-link" href="/pupillist" sec:authorize="hasAuthority('ADMIN')">Oppilaat ja suoritukset</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/pupillist" sec:authorize="hasAuthority('USER')">Omat suoritukset</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/lessonlist">Tuntipäiväkirja</a>
 			</li>
 			<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 				<a class="nav-link" href="/create">Lisää suorituksia</a>
+			</li>
+			<li class="nav-item" sec:authorize="hasAuthority('USER')">
+				<a class="nav-link" href="/pupilAddPerformance">Lisää suoritus</a>
 			</li>
 			<li class="nav-item">
 				<form th:action="@{/logout}" method="post" class="nav-link p-0">
@@ -75,8 +81,8 @@
         <tbody>
             <tr th:each="performance, iter : ${form.performances}">
                 <td th:text="${performance.pupil.firstName} + ' ' + ${performance.pupil.lastName}"></td>
-                <td><input type="number" th:field="*{performances[__${iter.index}__].effort}" class="form-control"></td>
-                <td><input type="number" th:field="*{performances[__${iter.index}__].skills}" class="form-control"></td>
+                <td><input type="number" th:field="*{performances[__${iter.index}__].effort}" class="form-control" min="4" max="10" step="1"></td>
+                <td><input type="number" th:field="*{performances[__${iter.index}__].skills}" class="form-control" min="4" max="10" step="1"></td>
                 <td><input type="text" th:field="*{performances[__${iter.index}__].shortDescription}" class="form-control"></td>
                 <td><input type="checkbox" th:field="*{performances[__${iter.index}__].attendance}"></td>
 
