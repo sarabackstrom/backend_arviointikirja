@@ -1,8 +1,6 @@
 package k25.arviointikirja.web;
 
 import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,87 +18,97 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
 
-
-
-
-
-
 @Controller
 public class LessonController {
 
-    @Autowired
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
+    private final PupilClassRepository pupilClassRepository;
+    private final SportRepository sportRepository;
+    private final UserService userService;
 
-    @Autowired
-    private PupilClassRepository pupilClassRepository;
+    public LessonController(LessonRepository lessonRepository, PupilClassRepository pupilClassRepository,
+            SportRepository sportRepository, UserService userService) {
+        this.lessonRepository = lessonRepository;
+        this.pupilClassRepository = pupilClassRepository;
+        this.sportRepository = sportRepository;
+        this.userService = userService;
+    }
 
-    @Autowired
-    private SportRepository sportRepository;
+    /*
+     * @Autowired
+     * private LessonRepository lessonRepository;
+     * 
+     * @Autowired
+     * private PupilClassRepository pupilClassRepository;
+     * 
+     * @Autowired
+     * private SportRepository sportRepository;
+     * 
+     * @Autowired
+     * UserService userService;
+     */
 
-    @Autowired
-    UserService userService;
-
-//show all lessons
-@GetMapping("/lessonlist")
-public String lessonlist(Model model) {
-    model.addAttribute("lessons", lessonRepository.findAll());
-    Pupil authenticatedPupil = userService.getAuthenticatedPupil();
+    // show all lessons
+    @GetMapping("/lessonlist")
+    public String lessonlist(Model model) {
+        model.addAttribute("lessons", lessonRepository.findAll());
+        Pupil authenticatedPupil = userService.getAuthenticatedPupil();
         model.addAttribute("authenticatedPupil", authenticatedPupil);
-    return "lessonlist";
-}
-    
+        return "lessonlist";
+    }
 
-@PreAuthorize("hasAuthority('ADMIN')")
-//add lesson
-@GetMapping("/addLesson")
-public String addLesson(Model model) {
-    model.addAttribute("lesson", new Lesson());
-    model.addAttribute("pupilclasses", pupilClassRepository.findAll());
-    model.addAttribute("sports", sportRepository.findAll());
-    return "addLesson";
-}
-
-//save lesson
-@PostMapping("/saveLesson")
-public String saveLesson(@Valid @ModelAttribute Lesson lesson, BindingResult bindingResult, Model model) {
-    if(bindingResult.hasErrors()){
+    @PreAuthorize("hasAuthority('ADMIN')")
+    // add lesson
+    @GetMapping("/addLesson")
+    public String addLesson(Model model) {
+        model.addAttribute("lesson", new Lesson());
         model.addAttribute("pupilclasses", pupilClassRepository.findAll());
         model.addAttribute("sports", sportRepository.findAll());
         return "addLesson";
     }
-    lessonRepository.save(lesson);
-    return "redirect:lessonlist";
-}
 
-@PostMapping("/saveEditedLesson")
-public String saveEditedLesson(@ModelAttribute Lesson lesson) {
-    lessonRepository.save(lesson);
-    return "redirect:lessonlist";
-}
-
-@PreAuthorize("hasAuthority('ADMIN')")
-@GetMapping("/editLesson/{id}")
-public String editLesson(@PathVariable("id") Long id, Model model) {
-    Optional<Lesson> lesson = lessonRepository.findById(id);
-    if (lesson.isPresent()) {
-        model.addAttribute("lesson", lesson.get()); // En osannut itse ratkaista, miksi Edit ei toiminut, joten tekoäly neuvoi laittamaan optionalin, jotta päivämäärä saatiin säilymään
-    } else {
-        return "redirect:/lessonlist"; // Jos ei löydy, palataan listaan
+    // save lesson
+    @PostMapping("/saveLesson")
+    public String saveLesson(@Valid @ModelAttribute Lesson lesson, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("pupilclasses", pupilClassRepository.findAll());
+            model.addAttribute("sports", sportRepository.findAll());
+            return "addLesson";
+        }
+        lessonRepository.save(lesson);
+        return "redirect:lessonlist";
     }
-    model.addAttribute("pupilclasses", pupilClassRepository.findAll());
-    model.addAttribute("sports", sportRepository.findAll());
-    return "editlesson";
-}
 
-/*Jos oppitunti poistetaan niin suoritukset katoaa, ei voi poistaa!
-@GetMapping("/deleteLesson/{id}")
-public String deleteLesson(@PathVariable("id") Long LessonId, Model model) {
-    lessonRepository.deleteById(LessonId);
-    return "redirect:/lessonlist";
-}*/
+    @PostMapping("/saveEditedLesson")
+    public String saveEditedLesson(@ModelAttribute Lesson lesson) {
+        lessonRepository.save(lesson);
+        return "redirect:lessonlist";
+    }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/editLesson/{id}")
+    public String editLesson(@PathVariable("id") Long id, Model model) {
+        Optional<Lesson> lesson = lessonRepository.findById(id);
+        if (lesson.isPresent()) {
+            model.addAttribute("lesson", lesson.get()); // En osannut itse ratkaista, miksi Edit ei toiminut, joten
+                                                        // tekoäly neuvoi laittamaan optionalin, jotta päivämäärä
+                                                        // saatiin säilymään
+        } else {
+            return "redirect:/lessonlist"; // Jos ei löydy, palataan listaan
+        }
+        model.addAttribute("pupilclasses", pupilClassRepository.findAll());
+        model.addAttribute("sports", sportRepository.findAll());
+        return "editlesson";
+    }
 
-
-
+    /*
+     * Jos oppitunti poistetaan niin suoritukset katoaa, ei voi poistaa!
+     * 
+     * @GetMapping("/deleteLesson/{id}")
+     * public String deleteLesson(@PathVariable("id") Long LessonId, Model model) {
+     * lessonRepository.deleteById(LessonId);
+     * return "redirect:/lessonlist";
+     * }
+     */
 
 }

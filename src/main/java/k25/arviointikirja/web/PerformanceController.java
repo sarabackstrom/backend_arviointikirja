@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,32 +17,50 @@ import k25.arviointikirja.domain.PerformanceRepository;
 import k25.arviointikirja.domain.Pupil;
 import k25.arviointikirja.domain.PupilClassRepository;
 import k25.arviointikirja.domain.PupilRepository;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class PerformanceController {
 
-    @Autowired
-    private PerformanceRepository performanceRepository;
+    /*
+     * @Autowired
+     * private PerformanceRepository performanceRepository;
+     * 
+     * @Autowired
+     * private PupilRepository pupilRepository;
+     * 
+     * @Autowired
+     * private LessonRepository lessonRepository;
+     * 
+     * @Autowired
+     * private PupilClassRepository pupilClassRepository;
+     * 
+     * @Autowired
+     * UserService uService;
+     */
 
-    @Autowired
-    private PupilRepository pupilRepository;
+    private final LessonRepository lessonRepository;
+    private final PupilClassRepository pupilClassRepository;
+    private final UserService uService;
+    private final PupilRepository pupilRepository;
+    private final PerformanceRepository performanceRepository;
 
-    @Autowired
-    private LessonRepository lessonRepository;
+    public PerformanceController(LessonRepository lessonRepository, PupilClassRepository pupilClassRepository,
+            UserService uService, PupilRepository pupilRepository, PerformanceRepository performanceRepository) {
+        this.lessonRepository = lessonRepository;
+        this.pupilClassRepository = pupilClassRepository;
+        this.uService = uService;
+        this.pupilRepository = pupilRepository;
+        this.performanceRepository = performanceRepository;
+    }
 
-    @Autowired
-    private PupilClassRepository pupilClassRepository;
-
-    @Autowired
-    UserService uService;
-
-    // Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list sekä suodatuksissa(stream) tekoälyä
+    // Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list sekä
+    // suodatuksissa(stream) tekoälyä
     @GetMapping("/create")
     public String showPerformancesForm(@RequestParam(required = false) Long classId, Model model) {
         List<Pupil> pupils = new ArrayList<>();
@@ -55,12 +72,16 @@ public class PerformanceController {
             lessons = lessonRepository.findByPupilClass_classId(classId);
         }
 
-        //uusi osuus
-          // Suodatetaan pois oppitunnit, joilla on suorituksia, joissa pupilAddsPerformance on false
-    List<Lesson> filteredLessons = lessons.stream()
-    .filter(lesson -> lesson.getPerformances().stream()
-        .noneMatch(performance -> !performance.isPupilAddsPerformance())) // Poistetaan oppitunnit, joilla on suoritus, jossa pupilAddsPerformance on false
-    .collect(Collectors.toList());
+        // uusi osuus
+        // Suodatetaan pois oppitunnit, joilla on suorituksia, joissa
+        // pupilAddsPerformance on false
+        List<Lesson> filteredLessons = lessons.stream()
+                .filter(lesson -> lesson.getPerformances().stream()
+                        .noneMatch(performance -> !performance.isPupilAddsPerformance())) // Poistetaan oppitunnit,
+                                                                                          // joilla on suoritus, jossa
+                                                                                          // pupilAddsPerformance on
+                                                                                          // false
+                .collect(Collectors.toList());
 
         // Luodaan PerformanceCreationDto, joka sisältää suoritukset oppilaille
         PerformanceCreationDto performanceForm = new PerformanceCreationDto();
@@ -85,27 +106,34 @@ public class PerformanceController {
         Pupil authenticatedPupil = uService.getAuthenticatedPupil();
 
         // Hae kaikki oppilaan suoritukset
-    List<Performance> performances = performanceRepository.findByPupilPupilId(authenticatedPupil.getPupilId());
+        List<Performance> performances = performanceRepository.findByPupilPupilId(authenticatedPupil.getPupilId());
 
-    // Suodata pois ne suoritukset, joissa pupilAddsPerformance on true
-    List<Performance> filteredPerformances = performances.stream()
-        .filter(performance -> !performance.isPupilAddsPerformance()) // Poistetaan ne suoritukset, joissa pupilAddsPerformance on true
-        .collect(Collectors.toList());
+        // Suodata pois ne suoritukset, joissa pupilAddsPerformance on true
+        List<Performance> filteredPerformances = performances.stream()
+                .filter(performance -> !performance.isPupilAddsPerformance()) // Poistetaan ne suoritukset, joissa
+                                                                              // pupilAddsPerformance on true
+                .collect(Collectors.toList());
 
-       // Muuta Iterable<Lesson> List<Lesson> ja suodata oppitunnit
-       List<Lesson> filteredLessons = new ArrayList<>();
-       lessonRepository.findAll().forEach(filteredLessons::add); // Muutetaan Iterable List:ksi
-   
-       filteredLessons = filteredLessons.stream()
-           .filter(lesson -> lesson.getPupilClass().equals(authenticatedPupil.getPupilClass())) // Oppitunnit, jotka kuuluvat oppilaan luokkaan
-           .filter(lesson -> lesson.getPerformances().stream()
-               .noneMatch(performance -> performance.getPupil().equals(authenticatedPupil) && performance.isPupilAddsPerformance())) // Oppitunnit, joissa ei ole oppilaan suoritusta, jossa pupilAddsPerformance on true
-           .collect(Collectors.toList());
+        // Muuta Iterable<Lesson> List<Lesson> ja suodata oppitunnit
+        List<Lesson> filteredLessons = new ArrayList<>();
+        lessonRepository.findAll().forEach(filteredLessons::add); // Muutetaan Iterable List:ksi
+
+        filteredLessons = filteredLessons.stream()
+                .filter(lesson -> lesson.getPupilClass().equals(authenticatedPupil.getPupilClass())) // Oppitunnit,
+                                                                                                     // jotka kuuluvat
+                                                                                                     // oppilaan
+                                                                                                     // luokkaan
+                .filter(lesson -> lesson.getPerformances().stream()
+                        .noneMatch(performance -> performance.getPupil().equals(authenticatedPupil)
+                                && performance.isPupilAddsPerformance())) // Oppitunnit, joissa ei ole oppilaan
+                                                                          // suoritusta, jossa pupilAddsPerformance on
+                                                                          // true
+                .collect(Collectors.toList());
 
         model.addAttribute("authenticatedPupil", authenticatedPupil);
-    model.addAttribute("filteredLessons", filteredLessons); // Siirrä suodatetut oppitunnit
-    model.addAttribute("performance", new Performance()); // Tyhjä Performance-olio
-    model.addAttribute("filteredPerformances", filteredPerformances);
+        model.addAttribute("filteredLessons", filteredLessons); // Siirrä suodatetut oppitunnit
+        model.addAttribute("performance", new Performance()); // Tyhjä Performance-olio
+        model.addAttribute("filteredPerformances", filteredPerformances);
 
         return "pupilAddPerformance";
     }
@@ -193,27 +221,33 @@ public class PerformanceController {
                     .average()
                     .orElse(0.0);
 
-            /*työskentely ja taidot yhdistetty keskiarvo painoarvolla 50% työskentely ja 50% taidot ope */
+            /*
+             * työskentely ja taidot yhdistetty keskiarvo painoarvolla 50% työskentely ja
+             * 50% taidot ope
+             */
             double averageEffortAndSkills = (averageEffort + averageSkills) / 2;
 
-              // taidot-keskiarvo oppilas
-              double averageSkills2 = performances.stream()
-              .filter(performance -> performance.isPupilAddsPerformance())
-              .mapToDouble(Performance::getSkills)
-              .filter(skill -> skill > 0)
-              .average()
-              .orElse(0.0);
+            // taidot-keskiarvo oppilas
+            double averageSkills2 = performances.stream()
+                    .filter(performance -> performance.isPupilAddsPerformance())
+                    .mapToDouble(Performance::getSkills)
+                    .filter(skill -> skill > 0)
+                    .average()
+                    .orElse(0.0);
 
-      // työskentely-keskiarvo oppilas
-      double averageEffort2 = performances.stream()
-              .filter(performance -> performance.isPupilAddsPerformance())
-              .mapToDouble(Performance::getEffort)
-              .filter(effort -> effort > 0)
-              .average()
-              .orElse(0.0);
+            // työskentely-keskiarvo oppilas
+            double averageEffort2 = performances.stream()
+                    .filter(performance -> performance.isPupilAddsPerformance())
+                    .mapToDouble(Performance::getEffort)
+                    .filter(effort -> effort > 0)
+                    .average()
+                    .orElse(0.0);
 
-      /*työskentely ja taidot yhdistetty keskiarvo painoarvolla 50% työskentely ja 50% taidot oppilas */
-      double averageEffortAndSkills2 = (averageEffort2 + averageSkills2) / 2;
+            /*
+             * työskentely ja taidot yhdistetty keskiarvo painoarvolla 50% työskentely ja
+             * 50% taidot oppilas
+             */
+            double averageEffortAndSkills2 = (averageEffort2 + averageSkills2) / 2;
 
             model.addAttribute("performances", performances);
             model.addAttribute("pupil", pupil.get());

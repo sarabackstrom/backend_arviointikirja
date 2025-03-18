@@ -57,7 +57,7 @@ public class ArviointikirjaTests {
 
     @Test
     public void getCorrectData(){
-        Optional<Pupil> pupil = pupilRepository.findById((long) 702);
+        Optional<Pupil> pupil = pupilRepository.findById((long) 802);
         assertThat(pupil).isPresent();
         assertThat(pupil.get().getLastName()).isEqualTo("Porkkana");
         assertThat(pupil.get().getFirstName()).isEqualTo("Pirjo");

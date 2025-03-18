@@ -13,7 +13,6 @@ import k25.arviointikirja.domain.PupilRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @Controller
 public class PupilRestController {
 
@@ -29,7 +28,7 @@ public class PupilRestController {
     }
 
     @GetMapping("/pupils/{id}")
-    public @ResponseBody Optional<Pupil> findPupilRest(@PathVariable("id") Long pupilId){
+    public @ResponseBody Optional<Pupil> findPupilRest(@PathVariable("id") Long pupilId) {
         return pRepository.findById(pupilId);
     }
 
@@ -37,7 +36,5 @@ public class PupilRestController {
     public @ResponseBody Pupil saveNewPupil(@RequestBody Pupil pupil) {
         return pRepository.save(pupil);
     }
-    
-
 
 }

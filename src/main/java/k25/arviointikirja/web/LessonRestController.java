@@ -7,9 +7,7 @@ import org.springframework.stereotype.Controller;
 import k25.arviointikirja.domain.Lesson;
 import k25.arviointikirja.domain.LessonRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 @Controller
 public class LessonRestController {
@@ -21,9 +19,8 @@ public class LessonRestController {
     }
 
     @GetMapping("/lessons")
-    public @ResponseBody List<Lesson> lessonListRest(){
+    public @ResponseBody List<Lesson> lessonListRest() {
         return (List<Lesson>) lRepository.findAll();
     }
-    
 
 }
