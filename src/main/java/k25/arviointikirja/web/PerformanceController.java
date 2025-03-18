@@ -3,6 +3,7 @@ package k25.arviointikirja.web;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +43,7 @@ public class PerformanceController {
     @Autowired
     UserService uService;
 
-    // Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list
+    // Lähteenä käytetty sivua: https://www.baeldung.com/thymeleaf-list sekä suodatuksissa(stream) tekoälyä
     @GetMapping("/create")
     public String showPerformancesForm(@RequestParam(required = false) Long classId, Model model) {
         List<Pupil> pupils = new ArrayList<>();
@@ -53,6 +54,13 @@ public class PerformanceController {
             pupils = pupilRepository.findByPupilClass_classId(classId);
             lessons = lessonRepository.findByPupilClass_classId(classId);
         }
+
+        //uusi osuus
+          // Suodatetaan pois oppitunnit, joilla on suorituksia, joissa pupilAddsPerformance on false
+    List<Lesson> filteredLessons = lessons.stream()
+    .filter(lesson -> lesson.getPerformances().stream()
+        .noneMatch(performance -> !performance.isPupilAddsPerformance())) // Poistetaan oppitunnit, joilla on suoritus, jossa pupilAddsPerformance on false
+    .collect(Collectors.toList());
 
         // Luodaan PerformanceCreationDto, joka sisältää suoritukset oppilaille
         PerformanceCreationDto performanceForm = new PerformanceCreationDto();
@@ -65,7 +73,7 @@ public class PerformanceController {
 
         model.addAttribute("form", performanceForm);
         model.addAttribute("pupils", pupils);
-        model.addAttribute("lessons", lessons);
+        model.addAttribute("lessons", filteredLessons);
         model.addAttribute("pupilClasses", pupilClassRepository.findAll());
         model.addAttribute("selectedClassId", classId);
 
@@ -75,9 +83,30 @@ public class PerformanceController {
     @GetMapping("/pupilAddPerformance")
     public String pupilAddsPerformance(Model model) {
         Pupil authenticatedPupil = uService.getAuthenticatedPupil();
+
+        // Hae kaikki oppilaan suoritukset
+    List<Performance> performances = performanceRepository.findByPupilPupilId(authenticatedPupil.getPupilId());
+
+    // Suodata pois ne suoritukset, joissa pupilAddsPerformance on true
+    List<Performance> filteredPerformances = performances.stream()
+        .filter(performance -> !performance.isPupilAddsPerformance()) // Poistetaan ne suoritukset, joissa pupilAddsPerformance on true
+        .collect(Collectors.toList());
+
+       // Muuta Iterable<Lesson> List<Lesson> ja suodata oppitunnit
+       List<Lesson> filteredLessons = new ArrayList<>();
+       lessonRepository.findAll().forEach(filteredLessons::add); // Muutetaan Iterable List:ksi
+   
+       filteredLessons = filteredLessons.stream()
+           .filter(lesson -> lesson.getPupilClass().equals(authenticatedPupil.getPupilClass())) // Oppitunnit, jotka kuuluvat oppilaan luokkaan
+           .filter(lesson -> lesson.getPerformances().stream()
+               .noneMatch(performance -> performance.getPupil().equals(authenticatedPupil) && performance.isPupilAddsPerformance())) // Oppitunnit, joissa ei ole oppilaan suoritusta, jossa pupilAddsPerformance on true
+           .collect(Collectors.toList());
+
         model.addAttribute("authenticatedPupil", authenticatedPupil);
-        model.addAttribute("lessons", lessonRepository.findAll());
-        model.addAttribute("performance", new Performance());
+    model.addAttribute("filteredLessons", filteredLessons); // Siirrä suodatetut oppitunnit
+    model.addAttribute("performance", new Performance()); // Tyhjä Performance-olio
+    model.addAttribute("filteredPerformances", filteredPerformances);
+
         return "pupilAddPerformance";
     }
 

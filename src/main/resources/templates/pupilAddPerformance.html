@@ -45,12 +45,16 @@
 <div class="form-group">
     <form th:object="${performance}" th:action="@{/savePupilPerformance}" action="#" method="post">
         <p>Oppilaan nimi: <span th:text="${authenticatedPupil.pupilId}"></span></p>
-
         
+        <div th:if="${#lists.isEmpty(filteredLessons)}">
+            <p>Kaikille oppitunneille on jo lisätty suoritus.</p>
+        </div>
+        
+        <div th:unless="${#lists.isEmpty(filteredLessons)}">
         <div class="form-group">
             <label for="lesson">Valitse oppitunti:</label>
             <select id="lessonId" name="lessonId" class="form-control">
-                <option th:each="lesson : ${lessons}" th:value="${lesson.lessonId}" th:if="${lesson.pupilClass == authenticatedPupil.pupilClass}"  
+                <option th:each="lesson : ${filteredLessons}" th:value="${lesson.lessonId}"
                         th:text="${lesson.lessonDescription} + ' (' + ${lesson.lessonDay} + ')'">
                 </option>
             </select>
@@ -130,7 +134,10 @@
             <input type="checkbox" id="attendance" th:field="*{attendance}"  />
             </div>
 
+        
+
             <button type="submit" id="submitButton" class="btn btn-primary">Tallenna</button>    
+        </div>
         
     </form>
 </div>
